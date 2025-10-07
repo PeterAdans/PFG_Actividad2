@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ingresar Dinero - Tu Banco</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --brand:#4c1d95;   /* indigo oscuro (como en home) */
+      --brand-2:#6d28d9; /* morado acento */
+    }
+
+    body { background-color:#f8f9fa; }
+    .card { border-radius: 16px; overflow: hidden; }
+    .card-header{
+      background: linear-gradient(90deg, var(--brand), var(--brand-2));
+      color:#fff; font-weight:600;
+    }
+
+    /* Inputs con foco en color de marca */
+    .form-control:focus{
+      border-color:#a78bfa;
+      box-shadow:0 0 0 0.25rem rgba(109,40,217,.15);
+    }
+
+    /* Botón verde (semántico para “Ingresar”) */
+    .btn-success.btn-lg{ height:52px; border-radius:12px; font-weight:600; }
+    .btn-success.btn-lg:hover{ filter:brightness(.96); }
+
+    /* Enlace de volver con color de marca */
+    .link-brand{ color:var(--brand); text-decoration:none; }
+    .link-brand:hover{ color:var(--brand-2); text-decoration:underline; }
+  </style>
+</head>
+
+<body>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow-lg">
+        <div class="card-header text-center">
+          Ingreso de Dinero
+        </div>
+
+        <div class="card-body">
+          <!-- Mensaje -->
+          <div th:if="${mensaje}" class="alert alert-info text-center" th:text="${mensaje}"></div>
+
+          <!-- Formulario -->
+          <form th:action="@{/ingresar}" method="post">
+            <div class="mb-3">
+              <label for="cantidad" class="form-label">Cantidad a ingresar</label>
+              <input type="number" id="cantidad" name="cantidad" step="0.01" min="0.01"
+                     class="form-control" placeholder="p. ej., 150.00" required>
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-success btn-lg">Ingresar</button>
+            </div>
+          </form>
+
+          <div class="text-center mt-4">
+            <a th:href="@{/}" class="link-brand">← Volver al menú</a>
+          </div>
+        </div>
+
+        <div class="card-footer text-center text-muted small">
+          © 2025 Tu Banco
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Movimientos - Tu Banco</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    body { background: #f8f9fa; }
+    .card { border-radius: 14px; overflow: hidden; }
+    .card-header { background: #4c1d95; color: #fff; font-weight: 600; } /* indigo oscuro */
+
+    /* Borde lateral por tipo (fondo blanco) */
+    .row-ingreso td:first-child             { border-left: 6px solid #15803d; } /* verde  */
+    .row-extraccion td:first-child          { border-left: 6px solid #dc2626; } /* rojo   */
+    .row-extraccion-transfer td:first-child { border-left: 6px solid #991b1b; } /* rojo oscuro */
+
+    /* Importe con color sólido */
+    .importe { font-variant-numeric: tabular-nums; }
+  </style>
+</head>
+<body>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+      <div class="card shadow-lg">
+        <div class="card-header text-center">Movimientos de la Cuenta</div>
+
+        <div class="card-body">
+          <h5 class="text-center mb-4">
+            Saldo actual:
+            <span class="fw-bold text-primary">€<span th:text="${saldo}"></span></span>
+          </h5>
+
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped align-middle text-center bg-white">
+              <thead class="table-light">
+                <tr>
+                  <th>Fecha</th>
+                  <th>Importe (€)</th>
+                  <th>Tipo de Operación</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="ele : ${movimientos}"
+                    th:classappend="${(#strings.containsIgnoreCase(ele.operacion,'EXTRACC') and #strings.containsIgnoreCase(ele.operacion,'TRANSFER'))
+                                      ? 'row-extraccion-transfer'
+                                      : ((#strings.containsIgnoreCase(ele.operacion,'EXTRACC') or (ele.cantidad lt 0))
+                                          ? 'row-extraccion'
+                                          : 'row-ingreso')}">
+
+                  <td th:text="${#dates.format(ele.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+
+                  <!-- Importe: rojo si <0, verde si >=0; muestra + en positivos -->
+                  <td class="importe"
+                      th:classappend="${ele.cantidad lt 0} ? 'text-danger fw-semibold' : 'text-success fw-semibold'"
+                      th:text="${ele.cantidad > 0 ? '+' + ele.cantidad : ele.cantidad}">
+                  </td>
+
+                  <td th:text="${ele.operacion}"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="text-center mt-3">
+            <a th:href="@{/}" class="btn btn-outline-secondary">← Volver al menú</a>
+          </div>
+        </div>
+
+        <div class="card-footer text-center text-muted small">© 2025 Tu Banco</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
